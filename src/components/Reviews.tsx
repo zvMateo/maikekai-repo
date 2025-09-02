@@ -153,15 +153,16 @@ const Reviews = () => {
           viewport={{ once: true }}
           className="relative max-w-4xl mx-auto"
         >
-          <AnimatePresence>
-            <motion.div
-              key={currentReview}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.6 }}
-              className="relative"
-            >
+          <div className="relative min-h-[400px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentReview}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="absolute inset-0"
+              >
               {/* Main Review Card */}
               <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl border border-surf-blue/10 relative overflow-hidden">
                 {/* Wave Background Pattern */}
@@ -205,25 +206,27 @@ const Reviews = () => {
                 </div>
               </div>
 
-              {/* Navigation */}
-              <div className="absolute top-1/2 transform -translate-y-1/2 -left-6">
-                <button
-                  onClick={prevReview}
-                  className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center text-surf-navy hover:text-logo-teal-500 hover:bg-logo-teal-50 transition-all duration-300 border border-surf-blue/10"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-              </div>
-              <div className="absolute top-1/2 transform -translate-y-1/2 -right-6">
-                <button
-                  onClick={nextReview}
-                  className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center text-surf-navy hover:text-logo-teal-500 hover:bg-logo-teal-50 transition-all duration-300 border border-surf-blue/10"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Navigation */}
+          <div className="absolute top-1/2 transform -translate-y-1/2 left-2 md:left-4 z-10">
+            <button
+              onClick={prevReview}
+              className="w-12 h-12 md:w-14 md:h-14 bg-white/95 backdrop-blur-sm rounded-full shadow-xl flex items-center justify-center text-surf-navy hover:text-white hover:bg-logo-teal-500 transition-all duration-300 border border-surf-blue/20 hover:border-logo-teal-500 hover:scale-110"
+            >
+              <ChevronLeft size={20} className="md:w-6 md:h-6" />
+            </button>
+          </div>
+          <div className="absolute top-1/2 transform -translate-y-1/2 right-2 md:right-4 z-10">
+            <button
+              onClick={nextReview}
+              className="w-12 h-12 md:w-14 md:h-14 bg-white/95 backdrop-blur-sm rounded-full shadow-xl flex items-center justify-center text-surf-navy hover:text-white hover:bg-logo-teal-500 transition-all duration-300 border border-surf-blue/20 hover:border-logo-teal-500 hover:scale-110"
+            >
+              <ChevronRight size={20} className="md:w-6 md:h-6" />
+            </button>
+          </div>
 
           {/* Review Counter */}
           <div className="text-center mt-8">
