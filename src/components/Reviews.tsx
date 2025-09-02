@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { Star, Quote, ChevronLeft, ChevronRight, Waves, MapPin, Calendar, Users, Heart, Zap } from 'lucide-react'
+import { Star, Quote, Waves, Play, Pause, SkipBack, SkipForward } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Review } from '@/types'
 import Image from 'next/image'
@@ -19,7 +19,9 @@ const Reviews = () => {
       country: 'USA',
       comment: 'Pura vida! The instructors were incredible. I caught my first wave in 3 days. This place changed my life.',
       date: '2024-01-15',
-      package: 'Beginner'
+      package: 'Beginner',
+      rating: 5,
+      avatar: 'S'
     },
     {
       id: '2',
@@ -27,7 +29,9 @@ const Reviews = () => {
       country: 'Canada',
       comment: 'Perfect waves, perfect instructors, perfect vibes. Will definitely be back next season!',
       date: '2024-01-10',
-      package: 'Intermediate'
+      package: 'Intermediate',
+      rating: 5,
+      avatar: 'M'
     },
     {
       id: '3',
@@ -35,7 +39,9 @@ const Reviews = () => {
       country: 'UK',
       comment: 'As a beginner, I was nervous but the team made me feel so comfortable. The beachfront location is stunning!',
       date: '2024-01-08',
-      package: 'Beginner'
+      package: 'Beginner',
+      rating: 5,
+      avatar: 'E'
     },
     {
       id: '4',
@@ -43,7 +49,9 @@ const Reviews = () => {
       country: 'Australia',
       comment: 'Professional operation from start to finish. ISA certified instructors and top quality equipment.',
       date: '2024-01-05',
-      package: 'Intermediate'
+      package: 'Intermediate',
+      rating: 5,
+      avatar: 'D'
     },
     {
       id: '5',
@@ -51,7 +59,9 @@ const Reviews = () => {
       country: 'Germany',
       comment: 'The advanced coaching was exactly what I needed. Big wave training and video analysis helped me improve so much.',
       date: '2024-01-03',
-      package: 'Advanced'
+      package: 'Advanced',
+      rating: 5,
+      avatar: 'L'
     },
     {
       id: '6',
@@ -59,7 +69,9 @@ const Reviews = () => {
       country: 'France',
       comment: 'Great value! Everything included - accommodation, meals, transport, equipment. Perfect for year-round surfing.',
       date: '2024-01-01',
-      package: 'Weekend'
+      package: 'Weekend',
+      rating: 5,
+      avatar: 'T'
     }
   ]
 
@@ -102,25 +114,43 @@ const Reviews = () => {
   }
 
   return (
-    <section id="reviews" className="py-24 bg-gradient-to-b from-white to-surf-light/30">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="reviews" className="py-24 bg-gradient-to-br from-surf-light/20 via-white to-surf-light/10 relative overflow-hidden">
+      {/* Background Wave Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-10">
+          <Waves size={120} className="text-logo-teal-500" />
+        </div>
+        <div className="absolute bottom-20 right-10">
+          <Waves size={80} className="text-surf-blue" />
+        </div>
+        <div className="absolute top-1/2 left-1/4">
+          <Waves size={60} className="text-logo-teal-300" />
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <div className="flex items-center justify-center mb-6">
-            <Waves size={32} className="text-logo-teal-500 mr-3" />
-            <h2 className="text-4xl md:text-5xl font-serif font-bold text-surf-navy">
+          <div className="inline-flex items-center justify-center mb-8">
+            <div className="w-16 h-16 bg-gradient-to-br from-logo-teal-400 to-surf-blue rounded-full flex items-center justify-center mr-4">
+              <Waves size={32} className="text-white" />
+            </div>
+            <h2 className="text-5xl md:text-6xl font-serif font-bold text-surf-navy">
               Pura Vida Stories
             </h2>
-            <Waves size={32} className="text-logo-teal-500 ml-3" />
+            <div className="w-16 h-16 bg-gradient-to-br from-surf-blue to-logo-teal-400 rounded-full flex items-center justify-center ml-4">
+              <Waves size={32} className="text-white" />
+            </div>
           </div>
-          <p className="text-xl text-surf-blue/80 max-w-2xl mx-auto">
-            Real experiences from our surf family around the world
+          <p className="text-xl text-surf-blue/80 max-w-3xl mx-auto leading-relaxed">
+            Real experiences from our surf family around the world. 
+            <span className="text-logo-teal-500 font-semibold"> Every wave tells a story.</span>
           </p>
         </motion.div>
 
@@ -130,18 +160,19 @@ const Reviews = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <div className="inline-flex items-center space-x-4 bg-white/80 backdrop-blur-sm rounded-full px-8 py-4 shadow-lg border border-surf-blue/10">
+          <div className="inline-flex items-center space-x-6 bg-white/90 backdrop-blur-xl rounded-2xl px-12 py-6 shadow-2xl border border-surf-blue/10">
             <div className="flex items-center space-x-1">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} size={20} className="text-surf-sand fill-current" />
+                <Star key={i} size={24} className="text-surf-sand fill-current" />
               ))}
             </div>
-            <div className="text-2xl font-bold text-surf-navy">5.0</div>
-            <div className="text-surf-blue/70 text-sm">
+            <div className="text-3xl font-bold text-surf-navy">5.0</div>
+            <div className="text-surf-blue/70 text-lg font-medium">
               from {reviews.length} surfers
             </div>
+            <div className="w-2 h-2 bg-logo-teal-500 rounded-full animate-pulse"></div>
           </div>
         </motion.div>
 
@@ -151,99 +182,120 @@ const Reviews = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
-          className="relative max-w-4xl mx-auto"
+          className="relative max-w-5xl mx-auto"
         >
-          <div className="relative min-h-[400px]">
+          <div className="relative">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentReview}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="absolute inset-0"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+                className="relative"
               >
-              {/* Main Review Card */}
-              <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl border border-surf-blue/10 relative overflow-hidden">
-                {/* Wave Background Pattern */}
-                <div className="absolute top-0 right-0 w-32 h-32 opacity-5">
-                  <Waves size={128} className="text-logo-teal-500" />
-                </div>
-                
-                {/* Quote Icon */}
-                <div className="absolute top-6 right-6 text-logo-teal-200">
-                  <Quote size={32} />
-                </div>
+                {/* Main Review Card */}
+                <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-10 md:p-16 shadow-2xl border border-surf-blue/10 relative overflow-hidden">
+                  {/* Decorative Elements */}
+                  <div className="absolute top-0 right-0 w-40 h-40 opacity-5">
+                    <Waves size={160} className="text-logo-teal-500" />
+                  </div>
+                  <div className="absolute bottom-0 left-0 w-32 h-32 opacity-5">
+                    <Waves size={128} className="text-surf-blue" />
+                  </div>
+                  
+                  {/* Quote Icon */}
+                  <div className="absolute top-8 right-8 text-logo-teal-200">
+                    <Quote size={40} />
+                  </div>
 
-                {/* Review Content */}
-                <div className="relative z-10">
-                  {/* Comment */}
-                  <blockquote className="text-2xl md:text-3xl font-serif text-surf-navy leading-relaxed mb-8 italic">
-                    "{reviews[currentReview]?.comment}"
-                  </blockquote>
-
-                  {/* Author Info */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-logo-teal-400 to-surf-blue rounded-full flex items-center justify-center text-white font-bold text-lg">
-                        {reviews[currentReview]?.name?.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="font-semibold text-surf-navy text-lg">
-                          {reviews[currentReview]?.name}
-                        </div>
-                        <div className="text-sm text-surf-blue/70">
-                          {reviews[currentReview]?.country} • {formatDate(reviews[currentReview]?.date || '')}
-                        </div>
-                      </div>
+                  {/* Review Content */}
+                  <div className="relative z-10">
+                    {/* Rating Stars */}
+                    <div className="flex items-center space-x-1 mb-6">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={20} className="text-surf-sand fill-current" />
+                      ))}
                     </div>
 
-                    {/* Package Badge */}
-                    <div className={`px-4 py-2 rounded-full text-sm font-medium ${getPackageColor(reviews[currentReview]?.package || '')} bg-current/10`}>
-                      {reviews[currentReview]?.package}
+                    {/* Comment */}
+                    <blockquote className="text-3xl md:text-4xl font-serif text-surf-navy leading-relaxed mb-12 italic">
+                      "{reviews[currentReview]?.comment}"
+                    </blockquote>
+
+                    {/* Author Info */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-6">
+                        <div className="w-16 h-16 bg-gradient-to-br from-logo-teal-400 to-surf-blue rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                          {reviews[currentReview]?.avatar}
+                        </div>
+                        <div>
+                          <div className="font-bold text-surf-navy text-xl">
+                            {reviews[currentReview]?.name}
+                          </div>
+                          <div className="text-surf-blue/70 text-lg">
+                            {reviews[currentReview]?.country} • {formatDate(reviews[currentReview]?.date || '')}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Package Badge */}
+                      <div className={`px-6 py-3 rounded-full text-sm font-semibold ${getPackageColor(reviews[currentReview]?.package || '')} bg-current/10 shadow-lg`}>
+                        {reviews[currentReview]?.package}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Navigation */}
-          <div className="absolute top-1/2 transform -translate-y-1/2 left-2 md:left-4 z-10">
+          {/* Elegant Navigation Controls */}
+          <div className="flex items-center justify-center mt-12 space-x-8">
+            {/* Previous Button */}
             <button
               onClick={prevReview}
-              className="w-12 h-12 md:w-14 md:h-14 bg-white/95 backdrop-blur-sm rounded-full shadow-xl flex items-center justify-center text-surf-navy hover:text-white hover:bg-logo-teal-500 transition-all duration-300 border border-surf-blue/20 hover:border-logo-teal-500 hover:scale-110"
+              className="group flex items-center space-x-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-surf-blue/20 hover:bg-logo-teal-500 hover:border-logo-teal-500 transition-all duration-300 hover:scale-105"
             >
-              <ChevronLeft size={20} className="md:w-6 md:h-6" />
+              <SkipBack size={20} className="text-surf-navy group-hover:text-white transition-colors" />
+              <span className="text-surf-navy group-hover:text-white font-medium transition-colors">Previous</span>
             </button>
-          </div>
-          <div className="absolute top-1/2 transform -translate-y-1/2 right-2 md:right-4 z-10">
+
+            {/* Play/Pause Button */}
+            <button
+              onClick={() => setAutoPlay(!autoPlay)}
+              className="w-14 h-14 bg-gradient-to-br from-logo-teal-400 to-surf-blue rounded-full flex items-center justify-center text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110"
+            >
+              {autoPlay ? <Pause size={24} /> : <Play size={24} />}
+            </button>
+
+            {/* Next Button */}
             <button
               onClick={nextReview}
-              className="w-12 h-12 md:w-14 md:h-14 bg-white/95 backdrop-blur-sm rounded-full shadow-xl flex items-center justify-center text-surf-navy hover:text-white hover:bg-logo-teal-500 transition-all duration-300 border border-surf-blue/20 hover:border-logo-teal-500 hover:scale-110"
+              className="group flex items-center space-x-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-surf-blue/20 hover:bg-logo-teal-500 hover:border-logo-teal-500 transition-all duration-300 hover:scale-105"
             >
-              <ChevronRight size={20} className="md:w-6 md:h-6" />
+              <span className="text-surf-navy group-hover:text-white font-medium transition-colors">Next</span>
+              <SkipForward size={20} className="text-surf-navy group-hover:text-white transition-colors" />
             </button>
           </div>
 
-          {/* Review Counter */}
-          <div className="text-center mt-8">
-            <div className="flex items-center justify-center space-x-3">
-              <span className="text-sm text-surf-blue/70">
-                {currentReview + 1} of {reviews.length}
-              </span>
-              <div className="flex space-x-2">
-                {reviews.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === currentReview ? 'bg-logo-teal-500 w-6' : 'bg-surf-blue/30'
-                    }`}
-                  />
-                ))}
-              </div>
+          {/* Progress Indicators */}
+          <div className="flex items-center justify-center mt-8 space-x-4">
+            <span className="text-surf-blue/70 text-sm font-medium">
+              {currentReview + 1} of {reviews.length}
+            </span>
+            <div className="flex space-x-3">
+              {reviews.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentReview(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === currentReview 
+                      ? 'bg-logo-teal-500 w-8 shadow-lg' 
+                      : 'bg-surf-blue/30 hover:bg-surf-blue/50'
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </motion.div>
@@ -254,29 +306,41 @@ const Reviews = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
           viewport={{ once: true }}
-          className="mt-20 text-center"
+          className="mt-24 text-center"
         >
-          <div className="bg-gradient-to-r from-logo-teal-500 to-surf-blue rounded-3xl p-12 text-white relative overflow-hidden">
-            {/* Wave Pattern Background */}
-            <div className="absolute top-0 left-0 w-full h-full opacity-10">
-              <div className="absolute top-4 left-4">
-                <Waves size={64} className="text-white" />
+          <div className="bg-gradient-to-br from-logo-teal-500 via-surf-blue to-logo-teal-600 rounded-3xl p-16 text-white relative overflow-hidden">
+            {/* Animated Wave Pattern Background */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-8 left-8 animate-pulse">
+                <Waves size={80} className="text-white" />
               </div>
-              <div className="absolute bottom-4 right-4">
-                <Waves size={48} className="text-white" />
+              <div className="absolute bottom-8 right-8 animate-pulse" style={{ animationDelay: '1s' }}>
+                <Waves size={60} className="text-white" />
+              </div>
+              <div className="absolute top-1/2 left-1/4 animate-pulse" style={{ animationDelay: '2s' }}>
+                <Waves size={40} className="text-white" />
               </div>
             </div>
             
             <div className="relative z-10">
-              <h3 className="text-3xl md:text-4xl font-serif font-bold mb-6">
+              <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-8">
+                <Waves size={40} className="text-white" />
+              </div>
+              <h3 className="text-4xl md:text-5xl font-serif font-bold mb-8">
                 Ready to Ride the Wave?
               </h3>
-              <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-                Join our surf family and create your own Pura Vida story
+              <p className="text-xl md:text-2xl mb-12 opacity-90 max-w-3xl mx-auto leading-relaxed">
+                Join our surf family and create your own 
+                <span className="font-semibold"> Pura Vida story</span>
               </p>
-              <button className="bg-white text-logo-teal-500 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl">
-                Start Your Surf Journey
-              </button>
+              <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <button className="bg-white text-logo-teal-500 px-10 py-4 rounded-full font-bold text-lg hover:bg-gray-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105">
+                  Start Your Surf Journey
+                </button>
+                <button className="border-2 border-white text-white px-10 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-logo-teal-500 transition-all duration-300">
+                  View Packages
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>
