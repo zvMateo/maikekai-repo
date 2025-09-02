@@ -1,0 +1,35 @@
+{
+  "name": "Maikekai Surf - Costa Rica Surf Resort & Hotel",
+  "short_name": "Maikekai Surf",
+  "description": "Experience the ultimate surf adventure at Maikekai Surf Hotel in Costa Rica. Book your surf lessons, accommodation, and immerse yourself in the Pura Vida lifestyle.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#EEF4FF",
+  "theme_color": "#55ACD8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["travel", "sports", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr"
+}

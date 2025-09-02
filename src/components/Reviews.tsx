@@ -22,7 +22,7 @@ const Reviews = () => {
       date: '2024-01-15',
       source: 'google',
       verified: true,
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
       country: 'United States',
       package: 'Pura Vida Beginner',
       helpful: 12
@@ -367,7 +367,7 @@ const Reviews = () => {
           viewport={{ once: true }}
           className="relative max-w-5xl mx-auto"
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             <motion.div
               key={currentReview}
               initial={{ opacity: 0, x: 50 }}
