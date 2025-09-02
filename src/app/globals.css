@@ -1,0 +1,195 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    font-family: "Work Sans", sans-serif;
+    background: linear-gradient(135deg, #eef4ff 0%, #55acd8 50%, #2b96cb 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Surf-inspired background effects */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at 20% 80%,
+        rgba(85, 172, 216, 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(255, 218, 120, 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 40% 40%,
+        rgba(20, 184, 166, 0.05) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Floating bubbles effect */
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(
+        circle at 25% 25%,
+        rgba(255, 255, 255, 0.1) 2px,
+        transparent 2px
+      ),
+      radial-gradient(
+        circle at 75% 75%,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px
+      );
+    background-size: 50px 50px, 30px 30px;
+    animation: bubble 20s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Roboto Slab", serif;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  /* Smooth transitions for all interactive elements */
+  * {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-surf-blue-500 hover:bg-surf-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl relative overflow-hidden;
+    background: linear-gradient(135deg, #55acd8 0%, #2b96cb 100%);
+  }
+
+  .btn-primary::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  .btn-primary:hover::before {
+    left: 100%;
+  }
+
+  .btn-secondary {
+    @apply bg-surf-sand-500 hover:bg-surf-sand-600 text-surf-navy-900 font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+    background: linear-gradient(135deg, #ffda78 0%, #f59e0b 100%);
+  }
+
+  .btn-outline {
+    @apply border-2 border-surf-blue-500 text-surf-blue-600 hover:bg-surf-blue-500 hover:text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm;
+  }
+
+  .card {
+    @apply bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20;
+  }
+
+  .card-surf {
+    @apply card;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(238, 244, 255, 0.8) 100%
+    );
+    backdrop-filter: blur(10px);
+  }
+
+  .gradient-bg {
+    background: linear-gradient(135deg, #eef4ff 0%, #55acd8 50%, #2b96cb 100%);
+  }
+
+  .gradient-bg-surf {
+    background: linear-gradient(
+      135deg,
+      #eef4ff 0%,
+      #55acd8 25%,
+      #14b8a6 50%,
+      #10b981 75%,
+      #2b96cb 100%
+    );
+  }
+
+  .wave-bg {
+    background: linear-gradient(45deg, #55acd8 25%, transparent 25%),
+      linear-gradient(-45deg, #55acd8 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #55acd8 75%),
+      linear-gradient(-45deg, transparent 75%, #55acd8 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  }
+
+  .surf-float {
+    animation: surf-float 8s ease-in-out infinite;
+  }
+
+  .wave-roll {
+    animation: wave-roll 4s ease-in-out infinite;
+  }
+
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .surf-text-gradient {
+    background: linear-gradient(135deg, #55acd8 0%, #2b96cb 50%, #0e3244 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .backdrop-blur {
+    backdrop-filter: blur(10px);
+  }
+}
