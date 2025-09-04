@@ -7,19 +7,23 @@ A modern, responsive website for Maikekai Surf Hotel in Costa Rica, built with N
 - **Responsive Design**: Mobile-first approach with beautiful animations
 - **Multi-language Support**: English, Spanish, French, and German
 - **SEO Optimized**: Meta tags, structured data, and performance optimized
-- **Surf Packages**: Interactive booking system for surf lessons
-- **Reviews Integration**: Display reviews from multiple platforms
+- **Real-time Data**: Supabase integration for dynamic content
+- **Google Reviews**: Automatic integration with Google Places API
+- **Surf Packages**: Interactive booking system with real data
+- **Reviews System**: Display both Google and internal reviews
 - **Direct Booking Links**: Integration with Booking.com, Airbnb, and Hostelworld
 - **WhatsApp Integration**: Direct contact via WhatsApp
 - **Admin Panel**: Management system for packages and bookings
+- **Photo Gallery**: Interactive gallery with filters and lightbox
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14 with App Router
+- **Framework**: Next.js 15 with App Router
 - **Language**: TypeScript
 - **Styling**: TailwindCSS
 - **Database**: Supabase
-- **Authentication**: Supabase Auth
+- **Authentication**: Clerk
+- **Reviews**: Google Places API
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
 - **Images**: Next.js Image Optimization

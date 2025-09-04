@@ -1,17 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, Star, Users, Calendar, Waves, Shield, Clock, MapPin, Heart, Zap, Award, Camera, Utensils, Car, Wifi, Gift } from 'lucide-react'
+import { Check, Star, Users, Calendar, Waves, Shield, Clock, MapPin, Heart, Zap, Award, Camera, Utensils, Car, Wifi, Gift, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { SurfPlan } from '@/types'
+import { useSurfPlans } from '@/hooks/useSurfPlans'
+import { useBusinessMetrics } from '@/hooks/useBusinessMetrics'
 
 const SurfPackages = () => {
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null)
   const [showBookingModal, setShowBookingModal] = useState(false)
   const [filterLevel, setFilterLevel] = useState<string>('all')
+  
+  // Use Supabase data
+  const { plans, loading, error } = useSurfPlans()
+  
+  // Business metrics tracking
+  const { trackPackageView, trackPackageInterest, trackPackageBooking } = useBusinessMetrics()
 
-  const packages: SurfPlan[] = [
+  // Fallback data if Supabase is not configured
+  const fallbackPackages: SurfPlan[] = [
     {
       id: '1',
       name: 'Pura Vida Beginner',
@@ -120,9 +129,23 @@ const SurfPackages = () => {
     }
   ]
 
-  const filteredPackages = packages.filter(pkg => 
+  // Use fallback data if Supabase is not configured or there's an error
+  const displayPackages = plans.length > 0 ? plans : fallbackPackages
+  const displayLoading = loading && plans.length === 0
+  const displayError = error && plans.length === 0
+
+  const filteredPackages = displayPackages.filter(pkg => 
     filterLevel === 'all' || pkg.level === filterLevel
   )
+
+  // Track package views when packages are displayed
+  useEffect(() => {
+    if (displayPackages.length > 0) {
+      displayPackages.forEach(pkg => {
+        trackPackageView(pkg.name, pkg.price)
+      })
+    }
+  }, [displayPackages, trackPackageView])
 
   const getDifficultyColor = (level: string) => {
     switch (level) {
@@ -186,6 +209,13 @@ const SurfPackages = () => {
   const handleBookPackage = (packageId: string) => {
     setSelectedPackage(packageId)
     setShowBookingModal(true)
+    
+    // Track package booking attempt
+    const package_ = displayPackages.find(p => p.id === packageId)
+    if (package_) {
+      trackPackageInterest(package_.name)
+      trackPackageBooking(package_.name, package_.price)
+    }
   }
 
   const calculateDiscount = (price: number, originalPrice?: number) => {
@@ -230,10 +260,32 @@ const SurfPackages = () => {
           </div>
         </motion.div>
 
+        {/* Loading State */}
+        {displayLoading && (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <Loader2 className="w-12 h-12 animate-spin text-logo-teal-500 mx-auto mb-4" />
+              <p className="text-surf-blue">Loading surf packages...</p>
+            </div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {displayError && (
+          <div className="text-center py-20">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+              <p className="text-red-600 font-semibold mb-2">Error loading packages</p>
+              <p className="text-red-500 text-sm">{error}</p>
+              <p className="text-gray-500 text-xs mt-2">Using fallback data for now</p>
+            </div>
+          </div>
+        )}
+
         {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
-          <AnimatePresence mode="wait">
-            {filteredPackages.map((pkg, index) => (
+        {!displayLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            <AnimatePresence mode="wait">
+              {filteredPackages.map((pkg, index) => (
               <motion.div
                 key={pkg.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -358,8 +410,9 @@ const SurfPackages = () => {
                 </div>
               </motion.div>
             ))}
-          </AnimatePresence>
-        </div>
+            </AnimatePresence>
+          </div>
+        )}
 
         {/* Additional Info */}
         <motion.div
@@ -423,7 +476,7 @@ const SurfPackages = () => {
                     Book Your Surf Package
                   </h3>
                   <p className="text-surf-blue">
-                    {packages.find(p => p.id === selectedPackage)?.name}
+                    {plans.find(p => p.id === selectedPackage)?.name}
                   </p>
                 </div>
 
@@ -443,7 +496,7 @@ const SurfPackages = () => {
                       Number of Participants
                     </label>
                     <select className="w-full px-4 py-3 border border-surf-blue/20 rounded-lg focus:ring-2 focus:ring-logo-teal-500 focus:border-transparent">
-                      {Array.from({ length: packages.find(p => p.id === selectedPackage)?.max_participants || 4 }, (_, i) => (
+                      {Array.from({ length: plans.find(p => p.id === selectedPackage)?.max_participants || 4 }, (_, i) => (
                         <option key={i + 1} value={i + 1}>{i + 1} {i === 0 ? 'person' : 'people'}</option>
                       ))}
                     </select>
@@ -464,11 +517,11 @@ const SurfPackages = () => {
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-surf-navy font-semibold">Total Price:</span>
                       <span className="text-2xl font-bold text-logo-teal-500">
-                        ${packages.find(p => p.id === selectedPackage)?.price}
+                        ${plans.find(p => p.id === selectedPackage)?.price}
                       </span>
                     </div>
                     <p className="text-sm text-surf-blue">
-                      per person • {packages.find(p => p.id === selectedPackage)?.duration_days} days
+                      per person • {plans.find(p => p.id === selectedPackage)?.duration_days} days
                     </p>
                   </div>
 

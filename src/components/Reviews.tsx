@@ -1,18 +1,23 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { Star, Quote, Waves, Play, Pause, SkipBack, SkipForward } from 'lucide-react'
+import { Star, Quote, Waves, Play, Pause, SkipBack, SkipForward, Loader2 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Review } from '@/types'
 import Image from 'next/image'
+import { useReviews } from '@/hooks/useReviews'
 
 const Reviews = () => {
   const [currentReview, setCurrentReview] = useState(0)
   const [filterSource, setFilterSource] = useState<string>('all')
   const [filterRating, setFilterRating] = useState<number>(0)
   const [autoPlay, setAutoPlay] = useState(true)
+  
+  // Use Supabase and Google Reviews data
+  const { reviews, loading, error, averageRating, totalReviews } = useReviews()
 
-  const reviews = [
+  // Fallback reviews if Supabase is not configured
+  const fallbackReviews = [
     {
       id: '1',
       name: 'Sarah',
@@ -75,32 +80,45 @@ const Reviews = () => {
     }
   ]
 
+  // Use fallback data if Supabase is not configured or there's an error
+  const displayReviews = reviews.length > 0 ? reviews : fallbackReviews
+  const displayLoading = loading && reviews.length === 0
+  const displayError = error && reviews.length === 0
+  const displayAverageRating = averageRating > 0 ? averageRating : 5.0
+  const displayTotalReviews = totalReviews > 0 ? totalReviews : fallbackReviews.length
+
   // Auto-play functionality
   useEffect(() => {
-    if (!autoPlay) return
+    if (!autoPlay || displayReviews.length === 0) return
     
     const interval = setInterval(() => {
-      setCurrentReview((prev) => (prev + 1) % reviews.length)
+      setCurrentReview((prev) => (prev + 1) % displayReviews.length)
     }, 4000)
     
     return () => clearInterval(interval)
-  }, [autoPlay, reviews.length])
+  }, [autoPlay, displayReviews.length])
 
   const nextReview = () => {
-    setCurrentReview((prev) => (prev + 1) % reviews.length)
+    if (displayReviews.length === 0) return
+    setCurrentReview((prev) => (prev + 1) % displayReviews.length)
     setAutoPlay(false)
   }
 
   const prevReview = () => {
-    setCurrentReview((prev) => (prev - 1 + reviews.length) % reviews.length)
+    if (displayReviews.length === 0) return
+    setCurrentReview((prev) => (prev - 1 + displayReviews.length) % displayReviews.length)
     setAutoPlay(false)
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric'
-    })
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric'
+      })
+    } catch {
+      return dateString
+    }
   }
 
   const getPackageColor = (packageName: string) => {
@@ -154,46 +172,74 @@ const Reviews = () => {
           </p>
         </motion.div>
 
-        {/* Overall Rating */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
-          <div className="inline-flex items-center space-x-6 bg-white/90 backdrop-blur-xl rounded-2xl px-12 py-6 shadow-2xl border border-surf-blue/10">
-            <div className="flex items-center space-x-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={24} className="text-surf-sand fill-current" />
-              ))}
+        {/* Loading State */}
+        {displayLoading && (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <Loader2 className="w-12 h-12 animate-spin text-logo-teal-500 mx-auto mb-4" />
+              <p className="text-surf-blue">Loading reviews...</p>
             </div>
-            <div className="text-3xl font-bold text-surf-navy">5.0</div>
-            <div className="text-surf-blue/70 text-lg font-medium">
-              from {reviews.length} surfers
-            </div>
-            <div className="w-2 h-2 bg-logo-teal-500 rounded-full animate-pulse"></div>
           </div>
-        </motion.div>
+        )}
+
+        {/* Error State */}
+        {displayError && (
+          <div className="text-center py-20">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+              <p className="text-red-600 font-semibold mb-2">Error loading reviews</p>
+              <p className="text-red-500 text-sm">{error}</p>
+              <p className="text-gray-500 text-xs mt-2">Using fallback data for now</p>
+            </div>
+          </div>
+        )}
+
+        {/* Overall Rating */}
+        {!displayLoading && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <div className="inline-flex items-center space-x-6 bg-white/90 backdrop-blur-xl rounded-2xl px-12 py-6 shadow-2xl border border-surf-blue/10">
+              <div className="flex items-center space-x-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star 
+                    key={i} 
+                    size={24} 
+                    className={`${i < Math.floor(displayAverageRating) ? 'text-surf-sand fill-current' : 'text-gray-300'}`} 
+                  />
+                ))}
+              </div>
+              <div className="text-3xl font-bold text-surf-navy">{displayAverageRating.toFixed(1)}</div>
+              <div className="text-surf-blue/70 text-lg font-medium">
+                from {displayTotalReviews} surfers
+              </div>
+              <div className="w-2 h-2 bg-logo-teal-500 rounded-full animate-pulse"></div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Featured Review */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="relative max-w-5xl mx-auto"
-        >
-          <div className="relative">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentReview}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="relative"
-              >
+        {!displayLoading && displayReviews.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="relative max-w-5xl mx-auto"
+          >
+            <div className="relative">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentReview}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                  className="relative"
+                >
                 {/* Main Review Card */}
                 <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-10 md:p-16 shadow-2xl border border-surf-blue/10 relative overflow-hidden">
                   {/* Decorative Elements */}
@@ -214,35 +260,41 @@ const Reviews = () => {
                     {/* Rating Stars */}
                     <div className="flex items-center space-x-1 mb-6">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={20} className="text-surf-sand fill-current" />
+                        <Star 
+                          key={i} 
+                          size={20} 
+                          className={`${i < (displayReviews[currentReview]?.rating || 0) ? 'text-surf-sand fill-current' : 'text-gray-300'}`} 
+                        />
                       ))}
                     </div>
 
                     {/* Comment */}
                     <blockquote className="text-3xl md:text-4xl font-serif text-surf-navy leading-relaxed mb-12 italic">
-                      "{reviews[currentReview]?.comment}"
+                      "{displayReviews[currentReview]?.comment || displayReviews[currentReview]?.text}"
                     </blockquote>
 
                     {/* Author Info */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-6">
                         <div className="w-16 h-16 bg-gradient-to-br from-logo-teal-400 to-surf-blue rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                          {reviews[currentReview]?.avatar}
+                          {displayReviews[currentReview]?.avatar || displayReviews[currentReview]?.name?.charAt(0)?.toUpperCase() || 'A'}
                         </div>
                         <div>
                           <div className="font-bold text-surf-navy text-xl">
-                            {reviews[currentReview]?.name}
+                            {displayReviews[currentReview]?.name || 'Anonymous'}
                           </div>
                           <div className="text-surf-blue/70 text-lg">
-                            {reviews[currentReview]?.country} • {formatDate(reviews[currentReview]?.date || '')}
+                            {displayReviews[currentReview]?.country || 'Unknown'} • {formatDate(displayReviews[currentReview]?.date || displayReviews[currentReview]?.created_at || '')}
                           </div>
                         </div>
                       </div>
 
-                      {/* Package Badge */}
-                      <div className={`px-6 py-3 rounded-full text-sm font-semibold ${getPackageColor(reviews[currentReview]?.package || '')} bg-current/10 shadow-lg`}>
-                        {reviews[currentReview]?.package}
-                      </div>
+                      {/* Google Review Badge */}
+                      {displayReviews[currentReview]?.is_google_review && (
+                        <div className="px-6 py-3 rounded-full text-sm font-semibold text-blue-500 bg-blue-100 shadow-lg">
+                          Google Review
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -250,55 +302,59 @@ const Reviews = () => {
             </AnimatePresence>
           </div>
 
-          {/* Elegant Navigation Controls */}
-          <div className="flex items-center justify-center mt-12 space-x-8">
-            {/* Previous Button */}
-            <button
-              onClick={prevReview}
-              className="group flex items-center space-x-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-surf-blue/20 hover:bg-logo-teal-500 hover:border-logo-teal-500 transition-all duration-300 hover:scale-105"
-            >
-              <SkipBack size={20} className="text-surf-navy group-hover:text-white transition-colors" />
-              <span className="text-surf-navy group-hover:text-white font-medium transition-colors">Previous</span>
-            </button>
+            {/* Elegant Navigation Controls */}
+            <div className="flex items-center justify-center mt-12 space-x-8">
+              {/* Previous Button */}
+              <button
+                onClick={prevReview}
+                disabled={displayReviews.length === 0}
+                className="group flex items-center space-x-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-surf-blue/20 hover:bg-logo-teal-500 hover:border-logo-teal-500 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <SkipBack size={20} className="text-surf-navy group-hover:text-white transition-colors" />
+                <span className="text-surf-navy group-hover:text-white font-medium transition-colors">Previous</span>
+              </button>
 
-            {/* Play/Pause Button */}
-            <button
-              onClick={() => setAutoPlay(!autoPlay)}
-              className="w-14 h-14 bg-gradient-to-br from-logo-teal-400 to-surf-blue rounded-full flex items-center justify-center text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110"
-            >
-              {autoPlay ? <Pause size={24} /> : <Play size={24} />}
-            </button>
+              {/* Play/Pause Button */}
+              <button
+                onClick={() => setAutoPlay(!autoPlay)}
+                disabled={displayReviews.length === 0}
+                className="w-14 h-14 bg-gradient-to-br from-logo-teal-400 to-surf-blue rounded-full flex items-center justify-center text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {autoPlay ? <Pause size={24} /> : <Play size={24} />}
+              </button>
 
-            {/* Next Button */}
-            <button
-              onClick={nextReview}
-              className="group flex items-center space-x-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-surf-blue/20 hover:bg-logo-teal-500 hover:border-logo-teal-500 transition-all duration-300 hover:scale-105"
-            >
-              <span className="text-surf-navy group-hover:text-white font-medium transition-colors">Next</span>
-              <SkipForward size={20} className="text-surf-navy group-hover:text-white transition-colors" />
-            </button>
-          </div>
-
-          {/* Progress Indicators */}
-          <div className="flex items-center justify-center mt-8 space-x-4">
-            <span className="text-surf-blue/70 text-sm font-medium">
-              {currentReview + 1} of {reviews.length}
-            </span>
-            <div className="flex space-x-3">
-              {reviews.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentReview(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentReview 
-                      ? 'bg-logo-teal-500 w-8 shadow-lg' 
-                      : 'bg-surf-blue/30 hover:bg-surf-blue/50'
-                  }`}
-                />
-              ))}
+              {/* Next Button */}
+              <button
+                onClick={nextReview}
+                disabled={displayReviews.length === 0}
+                className="group flex items-center space-x-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-surf-blue/20 hover:bg-logo-teal-500 hover:border-logo-teal-500 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="text-surf-navy group-hover:text-white font-medium transition-colors">Next</span>
+                <SkipForward size={20} className="text-surf-navy group-hover:text-white transition-colors" />
+              </button>
             </div>
-          </div>
-        </motion.div>
+
+            {/* Progress Indicators */}
+            <div className="flex items-center justify-center mt-8 space-x-4">
+              <span className="text-surf-blue/70 text-sm font-medium">
+                {currentReview + 1} of {displayReviews.length}
+              </span>
+              <div className="flex space-x-3">
+                {displayReviews.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentReview(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      index === currentReview 
+                        ? 'bg-logo-teal-500 w-8 shadow-lg' 
+                        : 'bg-surf-blue/30 hover:bg-surf-blue/50'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Call to Action */}
         <motion.div

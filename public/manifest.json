@@ -1,35 +1,87 @@
 {
-  "name": "Maikekai Surf - Costa Rica Surf Resort & Hotel",
+  "name": "Maikekai Surf Hotel - Costa Rica",
   "short_name": "Maikekai Surf",
-  "description": "Experience the ultimate surf adventure at Maikekai Surf Hotel in Costa Rica. Book your surf lessons, accommodation, and immerse yourself in the Pura Vida lifestyle.",
+  "description": "Descubre el mejor hotel de surf en Costa Rica. Experiencias únicas, olas perfectas y el auténtico estilo de vida Pura Vida en Playa Hermosa.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#EEF4FF",
+  "background_color": "#0E3244",
   "theme_color": "#55ACD8",
   "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["travel", "lifestyle", "sports"],
   "icons": [
     {
-      "src": "/favicon.ico",
-      "sizes": "any",
-      "type": "image/x-icon"
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
       "src": "/apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png"
-    },
-    {
-      "src": "/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
     }
   ],
-  "categories": ["travel", "sports", "lifestyle"],
-  "lang": "en",
-  "dir": "ltr"
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Reservar Ahora",
+      "short_name": "Reservar",
+      "description": "Reserva tu estadía en Maikekai Surf Hotel",
+      "url": "/booking",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Paquetes de Surf",
+      "short_name": "Paquetes",
+      "description": "Explora nuestros paquetes de surf",
+      "url": "/surf-packages",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Galería",
+      "short_name": "Fotos",
+      "description": "Ve fotos de nuestro hotel y playa",
+      "url": "/gallery",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

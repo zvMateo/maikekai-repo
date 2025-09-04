@@ -5,6 +5,12 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+pnpm-lock.yaml
+
+# Keep package files (needed for deployment)
+# package.json - KEEP
+# package-lock.json - KEEP
+
 
 # Environment variables
 .env
@@ -12,6 +18,7 @@ lerna-debug.log*
 .env.development.local
 .env.test.local
 .env.production.local
+env.clerk.example
 
 # Next.js
 .next/
@@ -102,3 +109,122 @@ storybook-static
 
 # Turbo
 .turbo
+
+# Next.js specific
+.next/
+out/
+build/
+dist/
+
+# Vercel
+.vercel
+
+# Environment files (keep examples)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Keep example files
+!env.clerk.example
+!SUPABASE_SETUP.md
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Clerk configuration (can include secrets)
+/.clerk/
+
+# Temporary folders
+tmp/
+temp/
+
+# Local development
+.local
+
+# Storybook build outputs
+storybook-static
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Performance monitoring
+.vercel/analytics/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Test files
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Local development tools
+.tool-versions
