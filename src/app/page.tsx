@@ -1,33 +1,32 @@
-import Header from '@/components/Header'
-import Hero from '@/components/Hero'
-import BookingButtons from '@/components/BookingButtons'
-import Features from '@/components/Features'
-import SurfPackages from '@/components/SurfPackages'
-import Reviews from '@/components/Reviews'
-import Gallery from '@/components/Gallery'
-import Footer from '@/components/Footer'
-import FixedBottomBar from '@/components/FixedBottomBar'
-import DebugInfo from '@/components/DebugInfo'
-import { SurfServiceStructuredData, ReviewsStructuredData, FAQStructuredData } from '@/components/seo/StructuredData'
-import { useReviews } from '@/hooks/useReviews'
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import FeaturedPackages from "@/components/FeaturedPackages";
+import WhyChooseUs from "@/components/WhyChooseUs";
+import Testimonials from "@/components/Testimonials";
+import PhotoGallery from "@/components/PhotoGallery";
+import FinalCTA from "@/components/FinalCTA";
+import Footer from "@/components/Footer";
+import {
+  SurfServiceStructuredData,
+  ReviewsStructuredData,
+  FAQStructuredData,
+} from "@/components/seo/StructuredData";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-surf-light via-white to-surf-light">
-      <DebugInfo />
+    <main className="min-h-screen">
       <Header />
       <Hero />
-      <BookingButtons />
-      <Features />
-      <SurfPackages />
-      <Reviews />
-      <Gallery />
+      <FeaturedPackages />
+      <WhyChooseUs />
+      <Testimonials />
+      <PhotoGallery />
+      <FinalCTA />
       <Footer />
-      <FixedBottomBar />
-      
+
       {/* Structured Data for SEO */}
       <SurfServiceStructuredData />
       <FAQStructuredData />
     </main>
-  )
+  );
 }

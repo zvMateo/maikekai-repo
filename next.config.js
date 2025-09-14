@@ -32,15 +32,7 @@ const nextConfig = {
   
   // Optimización de bundle
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
+    optimizePackageImports: ['lucide-react'],
   },
   
   // Headers de seguridad y rendimiento
@@ -85,16 +77,12 @@ const nextConfig = {
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
         chunks: 'all',
+        maxInitialRequests: 20,
+        maxAsyncRequests: 20,
         cacheGroups: {
           default: false,
           vendors: false,
           // Agrupar librerías grandes
-          framerMotion: {
-            name: 'framer-motion',
-            chunks: 'all',
-            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
-            priority: 20,
-          },
           lucide: {
             name: 'lucide-react',
             chunks: 'all',

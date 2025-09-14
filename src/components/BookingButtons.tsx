@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { ExternalLink, MessageCircle, Calendar, Home, Globe } from 'lucide-react'
 
 const BookingButtons = () => {
@@ -37,34 +36,25 @@ const BookingButtons = () => {
   return (
     <section className="py-16 bg-gradient-to-br from-surf-light to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-surf-navy mb-4">
             Book Your Perfect Stay
           </h2>
           <p className="text-lg text-surf-blue max-w-2xl mx-auto">
             Choose your preferred booking platform or contact us directly for personalized assistance
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Booking Platforms */}
           {bookingPlatforms.map((platform, index) => (
-            <motion.a
+            <a
               key={platform.name}
               href={platform.url}
               target="_blank"
               rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className={`${platform.color} text-white rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-xl group`}
+              className={`${platform.color} text-white rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-xl group animate-slide-up`}
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="flex flex-col items-center space-y-4">
                 <platform.icon size={32} className="group-hover:scale-110 transition-transform duration-300" />
@@ -74,17 +64,14 @@ const BookingButtons = () => {
                 </div>
                 <ExternalLink size={16} className="opacity-70 group-hover:opacity-100 transition-opacity" />
               </div>
-            </motion.a>
+            </a>
           ))}
 
           {/* WhatsApp Direct Contact */}
-          <motion.button
+          <button
             onClick={handleWhatsApp}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true }}
-            className="bg-green-600 hover:bg-green-700 text-white rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-xl group"
+            className="bg-green-600 hover:bg-green-700 text-white rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-xl group animate-slide-up"
+            style={{ animationDelay: '0.3s' }}
           >
             <div className="flex flex-col items-center space-y-4">
               <MessageCircle size={32} className="group-hover:scale-110 transition-transform duration-300" />
@@ -94,17 +81,11 @@ const BookingButtons = () => {
               </div>
               <ExternalLink size={16} className="opacity-70 group-hover:opacity-100 transition-opacity" />
             </div>
-          </motion.button>
+          </button>
         </div>
 
         {/* Additional Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mt-12 text-center"
-        >
+        <div className="mt-12 text-center animate-fade-in">
           <div className="bg-white rounded-xl p-8 shadow-lg border border-surf-blue/10">
             <h3 className="text-xl font-serif font-bold text-surf-navy mb-4">
               Why Book Direct?
@@ -130,7 +111,7 @@ const BookingButtons = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

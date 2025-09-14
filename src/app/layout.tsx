@@ -1,20 +1,20 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { ClerkProvider } from '@clerk/nextjs'
-import { clerkConfigCustom } from '@/lib/clerk'
-import { generateMetadata, seoConfigs } from '@/lib/seo'
-import { HotelStructuredData } from '@/components/seo/StructuredData'
-import { AnalyticsProvider } from '@/components/analytics/AnalyticsProvider'
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
+import { clerkConfigCustom } from "@/lib/clerk";
+import { generateMetadata, seoConfigs } from "@/lib/seo";
+import { HotelStructuredData } from "@/components/seo/StructuredData";
+import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = generateMetadata(seoConfigs.home)
+export const metadata: Metadata = generateMetadata(seoConfigs.home);
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <ClerkProvider appearance={clerkConfigCustom.appearance}>
@@ -25,17 +25,21 @@ export default function RootLayout({
           <link rel="manifest" href="/manifest.json" />
           <meta name="theme-color" content="#55ACD8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          
+
           {/* Preconnect to external domains */}
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="anonymous"
+          />
           <link rel="preconnect" href="https://images.unsplash.com" />
-          
+
           {/* DNS prefetch for performance */}
           <link rel="dns-prefetch" href="//www.google-analytics.com" />
           <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         </head>
-        <body className={`${inter.className} antialiased`}>
+        <body className="antialiased">
           <AnalyticsProvider>
             {children}
             <HotelStructuredData />
@@ -43,5 +47,5 @@ export default function RootLayout({
         </body>
       </html>
     </ClerkProvider>
-  )
+  );
 }

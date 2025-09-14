@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Check, Star, Users, Calendar, Waves, Shield, Clock, MapPin, Heart, Zap, Award, Camera, Utensils, Car, Wifi, Gift, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { SurfPlan } from '@/types'
@@ -109,8 +108,8 @@ const SurfPackages = () => {
       level: 'beginner',
       duration_days: 2,
       duration_nights: 1,
-      price: 280,
-      original_price: 350,
+      price: 250,
+      original_price: 300,
       max_participants: 6,
       features: [
         '2 days of intensive surf lessons',
@@ -138,14 +137,12 @@ const SurfPackages = () => {
     filterLevel === 'all' || pkg.level === filterLevel
   )
 
-  // Track package views when packages are displayed
+  // Track package views
   useEffect(() => {
-    if (displayPackages.length > 0) {
-      displayPackages.forEach(pkg => {
-        trackPackageView(pkg.name, pkg.price)
-      })
-    }
-  }, [displayPackages, trackPackageView])
+    filteredPackages.forEach(pkg => {
+      trackPackageView(pkg.name, pkg.price)
+    })
+  }, [filteredPackages, trackPackageView])
 
   const getDifficultyColor = (level: string) => {
     switch (level) {
@@ -206,34 +203,23 @@ const SurfPackages = () => {
     }
   }
 
-  const handleBookPackage = (packageId: string) => {
-    setSelectedPackage(packageId)
+  const handlePackageSelect = (pkg: SurfPlan) => {
+    setSelectedPackage(pkg.id)
     setShowBookingModal(true)
-    
-    // Track package booking attempt
-    const package_ = displayPackages.find(p => p.id === packageId)
-    if (package_) {
-      trackPackageInterest(package_.name)
-      trackPackageBooking(package_.name, package_.price)
-    }
+    trackPackageInterest(pkg.name)
   }
 
-  const calculateDiscount = (price: number, originalPrice?: number) => {
-    if (!originalPrice) return 0
-    return Math.round(((originalPrice - price) / originalPrice) * 100)
+  const handleBookingConfirm = (pkg: SurfPlan) => {
+    trackPackageBooking(pkg.name, pkg.price)
+    setShowBookingModal(false)
+    setSelectedPackage(null)
   }
 
   return (
     <section id="packages" className="py-20 bg-gradient-to-br from-surf-light to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-surf-navy mb-4">
             Surf Packages & Pricing
           </h2>
@@ -258,7 +244,7 @@ const SurfPackages = () => {
               </button>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Loading State */}
         {displayLoading && (
@@ -284,270 +270,210 @@ const SurfPackages = () => {
         {/* Packages Grid */}
         {!displayLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
-            <AnimatePresence mode="wait">
-              {filteredPackages.map((pkg, index) => (
-              <motion.div
+            {filteredPackages.map((pkg, index) => (
+              <div
                 key={pkg.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`card p-6 relative group hover:shadow-2xl transition-all duration-300 ${
-                  selectedPackage === pkg.id ? 'ring-2 ring-logo-teal-500' : ''
-                }`}
+                className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden animate-slide-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                {/* Discount Badge */}
-                {pkg.original_price && pkg.original_price > pkg.price && (
-                  <div className="absolute -top-2 -right-2 z-10">
-                    <div className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      -{calculateDiscount(pkg.price, pkg.original_price)}%
-                    </div>
-                  </div>
-                )}
-
-                {/* Package Image */}
-                <div className="relative h-48 rounded-lg overflow-hidden mb-6">
+                {/* Image */}
+                <div className="relative h-48 overflow-hidden">
                   <Image
-                    src={pkg.image_url || ''}
+                    src={pkg.image_url || '/placeholder-surf.jpg'}
                     alt={pkg.name}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   
                   {/* Difficulty Badge */}
                   <div className="absolute top-4 left-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getDifficultyColor(pkg.level)} flex items-center gap-1`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getDifficultyColor(pkg.level)}`}>
                       {getDifficultyIcon(pkg.level)}
-                      {getDifficultyLabel(pkg.level)}
+                      <span className="ml-1">{getDifficultyLabel(pkg.level)}</span>
                     </span>
                   </div>
 
-                  {/* Price Badge */}
-                  <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1">
-                    <div className="text-center">
-                      <div className="text-sm font-bold text-surf-navy">${pkg.price}</div>
-                      {pkg.original_price && pkg.original_price > pkg.price && (
-                        <div className="text-xs text-gray-500 line-through">${pkg.original_price}</div>
-                      )}
+                  {/* Discount Badge */}
+                  {pkg.original_price && pkg.original_price > pkg.price && (
+                    <div className="absolute top-4 right-4">
+                      <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                        {Math.round(((pkg.original_price - pkg.price) / pkg.original_price) * 100)}% OFF
+                      </span>
                     </div>
-                  </div>
+                  )}
+
+                  {/* Heart Icon */}
+                  <button className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full p-2 hover:bg-white/30 transition-colors">
+                    <Heart className="h-4 w-4 text-white" />
+                  </button>
                 </div>
 
-                {/* Package Info */}
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-xl font-serif font-bold text-surf-navy mb-2 group-hover:text-logo-teal-500 transition-colors">
-                      {pkg.name}
-                    </h3>
-                    <p className="text-surf-blue text-sm leading-relaxed">
-                      {pkg.description}
-                    </p>
+                {/* Content */}
+                <div className="p-6">
+                  <div className="mb-4">
+                    <h3 className="text-xl font-bold text-surf-navy mb-2">{pkg.name}</h3>
+                    <p className="text-surf-blue text-sm leading-relaxed">{pkg.description}</p>
                   </div>
 
-                  {/* Package Details */}
-                  <div className="grid grid-cols-2 gap-3 text-sm text-surf-navy">
-                    <div className="flex items-center space-x-2">
-                      <Calendar size={16} className="text-logo-teal-500" />
+                  {/* Duration & Participants */}
+                  <div className="flex items-center gap-4 mb-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
                       <span>{pkg.duration_days} days</span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Users size={16} className="text-logo-teal-500" />
+                    <div className="flex items-center gap-1">
+                      <Users className="h-4 w-4" />
                       <span>Max {pkg.max_participants}</span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Clock size={16} className="text-logo-teal-500" />
-                      <span>{pkg.duration_nights} nights</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Heart size={16} className="text-logo-teal-500" />
-                      <span>Popular</span>
-                    </div>
                   </div>
 
-                  {/* Price */}
-                  <div className="text-center py-4 border-t border-surf-blue/10">
-                    <div className="text-3xl font-bold text-surf-navy">
-                      ${pkg.price}
-                    </div>
-                    <div className="text-sm text-surf-blue">
-                      per person
-                    </div>
-                    {pkg.original_price && pkg.original_price > pkg.price && (
-                      <div className="text-xs text-green-600 font-semibold mt-1">
-                        Save ${pkg.original_price - pkg.price}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Includes */}
-                  <div>
-                    <h4 className="font-semibold text-surf-navy mb-3">What's Included:</h4>
-                    <ul className="space-y-2 max-h-32 overflow-y-auto">
-                      {pkg.features.slice(0, 4).map((feature, idx) => (
-                        <li key={idx} className="flex items-start space-x-2">
-                          <div className="text-logo-teal-500 mt-0.5 flex-shrink-0">
-                            {getFeatureIcon(feature)}
-                          </div>
-                          <span className="text-sm text-surf-blue">{feature}</span>
+                  {/* Features */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold text-surf-navy mb-2">What's Included:</h4>
+                    <ul className="space-y-1">
+                      {pkg.features.slice(0, 3).map((feature, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-xs text-gray-600">
+                          {getFeatureIcon(feature)}
+                          <span>{feature}</span>
                         </li>
                       ))}
-                      {pkg.features.length > 4 && (
-                        <li className="text-xs text-logo-teal-500 font-semibold">
-                          +{pkg.features.length - 4} more features
+                      {pkg.features.length > 3 && (
+                        <li className="text-xs text-surf-blue font-medium">
+                          +{pkg.features.length - 3} more features
                         </li>
                       )}
                     </ul>
                   </div>
 
-                  {/* CTA Button */}
+                  {/* Price */}
+                  <div className="mb-6">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-bold text-surf-navy">${pkg.price}</span>
+                      {pkg.original_price && pkg.original_price > pkg.price && (
+                        <span className="text-lg text-gray-500 line-through">${pkg.original_price}</span>
+                      )}
+                      <span className="text-sm text-gray-600">per person</span>
+                    </div>
+                  </div>
+
+                  {/* Book Button */}
                   <button
-                    onClick={() => handleBookPackage(pkg.id)}
-                    className="w-full btn-primary mt-6 group-hover:bg-logo-teal-600 transition-colors"
+                    onClick={() => handlePackageSelect(pkg)}
+                    className="w-full bg-gradient-to-r from-logo-teal-500 to-surf-blue text-white py-3 px-6 rounded-xl font-semibold hover:from-logo-teal-600 hover:to-surf-blue/90 transition-all duration-300 hover:scale-105 active:scale-95"
                   >
-                    Book This Package
+                    Book Now
                   </button>
                 </div>
-              </motion.div>
+              </div>
             ))}
-            </AnimatePresence>
           </div>
         )}
 
-        {/* Additional Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-2xl p-8 shadow-lg border border-surf-blue/10"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-            <div>
-              <div className="w-12 h-12 bg-logo-teal-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Award size={24} className="text-logo-teal-500" />
-              </div>
-              <h4 className="font-semibold text-surf-navy mb-1">ISA Certified</h4>
-              <p className="text-sm text-surf-blue">Professional instructors</p>
-            </div>
-            <div>
-              <div className="w-12 h-12 bg-logo-teal-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Shield size={24} className="text-logo-teal-500" />
-              </div>
-              <h4 className="font-semibold text-surf-navy mb-1">Safety First</h4>
-              <p className="text-sm text-surf-blue">Certified equipment</p>
-            </div>
-            <div>
-              <div className="w-12 h-12 bg-logo-teal-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Calendar size={24} className="text-logo-teal-500" />
-              </div>
-              <h4 className="font-semibold text-surf-navy mb-1">Flexible Booking</h4>
-              <p className="text-sm text-surf-blue">Free cancellation</p>
-            </div>
-            <div>
-              <div className="w-12 h-12 bg-logo-teal-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Users size={24} className="text-logo-teal-500" />
-              </div>
-              <h4 className="font-semibold text-surf-navy mb-1">Small Groups</h4>
-              <p className="text-sm text-surf-blue">Personal attention</p>
+        {/* Booking Modal */}
+        {showBookingModal && selectedPackage && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-scale-in">
+              {(() => {
+                const pkg = displayPackages.find(p => p.id === selectedPackage)
+                if (!pkg) return null
+                
+                return (
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-2xl font-bold text-surf-navy">Book {pkg.name}</h3>
+                      <button
+                        onClick={() => setShowBookingModal(false)}
+                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <div className="space-y-6">
+                      {/* Package Summary */}
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="flex items-center gap-4 mb-4">
+                          <Image
+                            src={pkg.image_url || '/placeholder-surf.jpg'}
+                            alt={pkg.name}
+                            width={80}
+                            height={80}
+                            className="rounded-lg object-cover"
+                          />
+                          <div>
+                            <h4 className="font-semibold text-surf-navy">{pkg.name}</h4>
+                            <p className="text-sm text-gray-600">{pkg.duration_days} days • Max {pkg.max_participants} participants</p>
+                            <div className="flex items-baseline gap-2 mt-1">
+                              <span className="text-2xl font-bold text-surf-navy">${pkg.price}</span>
+                              {pkg.original_price && pkg.original_price > pkg.price && (
+                                <span className="text-lg text-gray-500 line-through">${pkg.original_price}</span>
+                              )}
+                              <span className="text-sm text-gray-600">per person</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Features */}
+                      <div>
+                        <h4 className="font-semibold text-surf-navy mb-3">What's Included:</h4>
+                        <ul className="space-y-2">
+                          {pkg.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
+                              {getFeatureIcon(feature)}
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Booking Form */}
+                      <div className="space-y-4">
+                        <h4 className="font-semibold text-surf-navy">Booking Details:</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Number of Participants</label>
+                            <select className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-logo-teal-500 focus:border-transparent">
+                              {Array.from({ length: pkg.max_participants }, (_, i) => (
+                                <option key={i + 1} value={i + 1}>{i + 1}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Date</label>
+                            <input
+                              type="date"
+                              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-logo-teal-500 focus:border-transparent"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-3 pt-4">
+                        <button
+                          onClick={() => setShowBookingModal(false)}
+                          className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => handleBookingConfirm(pkg)}
+                          className="flex-1 btn-primary"
+                        >
+                          Confirm Booking
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })()}
             </div>
           </div>
-        </motion.div>
-
-        {/* Booking Modal */}
-        <AnimatePresence>
-          {showBookingModal && selectedPackage && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-              onClick={() => setShowBookingModal(false)}
-            >
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-white rounded-2xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-serif font-bold text-surf-navy mb-2">
-                    Book Your Surf Package
-                  </h3>
-                  <p className="text-surf-blue">
-                    {plans.find(p => p.id === selectedPackage)?.name}
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-surf-navy mb-2">
-                      Select Dates
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full px-4 py-3 border border-surf-blue/20 rounded-lg focus:ring-2 focus:ring-logo-teal-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-surf-navy mb-2">
-                      Number of Participants
-                    </label>
-                    <select className="w-full px-4 py-3 border border-surf-blue/20 rounded-lg focus:ring-2 focus:ring-logo-teal-500 focus:border-transparent">
-                      {Array.from({ length: plans.find(p => p.id === selectedPackage)?.max_participants || 4 }, (_, i) => (
-                        <option key={i + 1} value={i + 1}>{i + 1} {i === 0 ? 'person' : 'people'}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-surf-navy mb-2">
-                      Special Requests
-                    </label>
-                    <textarea
-                      rows={3}
-                      placeholder="Any special requirements or requests..."
-                      className="w-full px-4 py-3 border border-surf-blue/20 rounded-lg focus:ring-2 focus:ring-logo-teal-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div className="bg-surf-light rounded-lg p-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-surf-navy font-semibold">Total Price:</span>
-                      <span className="text-2xl font-bold text-logo-teal-500">
-                        ${plans.find(p => p.id === selectedPackage)?.price}
-                      </span>
-                    </div>
-                    <p className="text-sm text-surf-blue">
-                      per person • {plans.find(p => p.id === selectedPackage)?.duration_days} days
-                    </p>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => setShowBookingModal(false)}
-                      className="flex-1 px-6 py-3 border border-surf-blue/20 text-surf-navy rounded-lg hover:bg-surf-light transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={() => {
-                        // Here you would integrate with your booking system
-                        alert('Booking functionality will be implemented with your backend!')
-                        setShowBookingModal(false)
-                      }}
-                      className="flex-1 btn-primary"
-                    >
-                      Confirm Booking
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        )}
       </div>
     </section>
   )

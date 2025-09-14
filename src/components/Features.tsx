@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { Waves, Users, Utensils, Wifi, Car, Shield, MapPin, Clock } from 'lucide-react'
 import Image from 'next/image'
 
@@ -69,13 +68,7 @@ const Features = () => {
     <section id="about" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-surf-navy mb-4">
             Why Choose Maikekai Surf?
           </h2>
@@ -83,18 +76,15 @@ const Features = () => {
             Experience the perfect blend of adventure, comfort, and authentic Costa Rican hospitality 
             in our beachfront surf resort.
           </p>
-        </motion.div>
+        </div>
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {features.map((feature, index) => (
-            <motion.div
+            <div
               key={feature.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="card p-6 text-center group"
+              className="card p-6 text-center group animate-slide-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="w-16 h-16 bg-surf-blue/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-surf-blue/20 transition-colors duration-300">
                 <feature.icon size={32} className={feature.color} />
@@ -105,27 +95,18 @@ const Features = () => {
               <p className="text-surf-blue leading-relaxed">
                 {feature.description}
               </p>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Highlights Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-r from-surf-light to-surf-blue/10 rounded-2xl p-8 md:p-12"
-        >
+        <div className="bg-gradient-to-r from-surf-light to-surf-blue/10 rounded-2xl p-8 md:p-12 animate-fade-in">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {highlights.map((highlight, index) => (
-              <motion.div
+              <div
                 key={highlight.title}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
-                className="text-center"
+                className="text-center animate-scale-in"
+                style={{ animationDelay: `${index * 0.2}s` }}
               >
                 <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <highlight.icon size={32} className="text-surf-blue" />
@@ -139,32 +120,23 @@ const Features = () => {
                 <p className="text-surf-navy/80">
                   {highlight.description}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Image Gallery */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
-        >
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in">
           {[
             'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
             'https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
             'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
             'https://images.unsplash.com/photo-1520451644838-906a72aa7c86?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
           ].map((image, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="relative h-64 rounded-xl overflow-hidden group"
+              className="relative h-64 rounded-xl overflow-hidden group animate-scale-in"
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
               <Image
                 src={image}
@@ -173,9 +145,9 @@ const Features = () => {
                 className="object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

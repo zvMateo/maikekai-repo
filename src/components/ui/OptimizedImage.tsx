@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 interface OptimizedImageProps {
@@ -88,14 +87,11 @@ export function OptimizedImage({
 
   if (animated && !isLoading) {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 1.1 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        {...motionProps}
+      <div
+        className="animate-scale-in"
       >
         {imageElement}
-      </motion.div>
+      </div>
     )
   }
 

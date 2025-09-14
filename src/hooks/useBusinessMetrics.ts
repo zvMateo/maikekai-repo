@@ -372,8 +372,13 @@ export function useBusinessMetrics() {
 
   // Initialize tracking on mount
   useEffect(() => {
-    startTracking()
-  }, [startTracking])
+    if (!isTracking) {
+      setIsTracking(true)
+      trackDeviceInfo()
+      trackPageView('home')
+      trackUserJourneyStep('landing')
+    }
+  }, []) // Empty dependency array to run only once
 
   return {
     metrics,

@@ -1,7 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap");
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   html {
@@ -87,7 +85,8 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-surf-blue-500 hover:bg-surf-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl relative overflow-hidden;
+    @apply text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl relative overflow-hidden;
+    background-color: #55acd8;
     background: linear-gradient(135deg, #55acd8 0%, #2b96cb 100%);
   }
 
@@ -112,12 +111,15 @@
   }
 
   .btn-secondary {
-    @apply bg-surf-sand-500 hover:bg-surf-sand-600 text-surf-navy-900 font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+    @apply text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+    color: #0e3244;
     background: linear-gradient(135deg, #ffda78 0%, #f59e0b 100%);
   }
 
   .btn-outline {
-    @apply border-2 border-surf-blue-500 text-surf-blue-600 hover:bg-surf-blue-500 hover:text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm;
+    @apply text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm;
+    border: 2px solid #55acd8;
+    color: #2b96cb;
   }
 
   .card {
@@ -125,7 +127,7 @@
   }
 
   .card-surf {
-    @apply card;
+    @apply bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20;
     background: linear-gradient(
       135deg,
       rgba(255, 255, 255, 0.9) 0%,
@@ -191,5 +193,507 @@
 
   .backdrop-blur {
     backdrop-filter: blur(10px);
+  }
+
+  /* TailwindCSS Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  .animate-slide-down {
+    animation: slideDown 0.3s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+  }
+
+  /* Keyframes for TailwindCSS animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Surf-themed animations */
+  .animate-wave-1 {
+    animation: wave1 8s ease-in-out infinite;
+  }
+
+  .animate-wave-2 {
+    animation: wave2 6s ease-in-out infinite;
+  }
+
+  .animate-wave-3 {
+    animation: wave3 4s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: floatSlow 6s ease-in-out infinite;
+  }
+
+  .animate-float-medium {
+    animation: floatMedium 4s ease-in-out infinite;
+  }
+
+  .animate-float-fast {
+    animation: floatFast 3s ease-in-out infinite;
+  }
+
+  .animate-surf-particle {
+    animation: surfParticle 4s linear infinite;
+  }
+
+  .animate-text-wave {
+    animation: textWave 3s ease-in-out infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+  }
+
+  .animate-star-twinkle {
+    animation: starTwinkle 2s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulseSlow 3s ease-in-out infinite;
+  }
+
+  .animate-ripple-1 {
+    animation: ripple1 4s ease-in-out infinite;
+  }
+
+  .animate-ripple-2 {
+    animation: ripple2 5s ease-in-out infinite;
+  }
+
+  .animate-ripple-3 {
+    animation: ripple3 6s ease-in-out infinite;
+  }
+
+  /* Keyframes for surf animations */
+  @keyframes wave1 {
+    0%,
+    100% {
+      transform: translateX(-100%) scaleY(1);
+    }
+    50% {
+      transform: translateX(0%) scaleY(1.2);
+    }
+  }
+
+  @keyframes wave2 {
+    0%,
+    100% {
+      transform: translateX(-100%) scaleY(1);
+    }
+    50% {
+      transform: translateX(0%) scaleY(1.1);
+    }
+  }
+
+  @keyframes wave3 {
+    0%,
+    100% {
+      transform: translateX(-100%) scaleY(1);
+    }
+    50% {
+      transform: translateX(0%) scaleY(1.05);
+    }
+  }
+
+  @keyframes floatSlow {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(5deg);
+    }
+  }
+
+  @keyframes floatMedium {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-15px) rotate(-3deg);
+    }
+  }
+
+  @keyframes floatFast {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(2deg);
+    }
+  }
+
+  @keyframes surfParticle {
+    0% {
+      transform: translateY(0px) translateX(0px) scale(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100px) translateX(20px) scale(0);
+      opacity: 0;
+    }
+  }
+
+  @keyframes textWave {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes starTwinkle {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.1);
+    }
+  }
+
+  @keyframes pulseSlow {
+    0%,
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4);
+    }
+    50% {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 10px rgba(20, 184, 166, 0);
+    }
+  }
+
+  @keyframes ripple1 {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  @keyframes ripple2 {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(3);
+      opacity: 0;
+    }
+  }
+
+  @keyframes ripple3 {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  /* Surf-themed animations */
+  .animate-wave-1 {
+    animation: wave1 8s ease-in-out infinite;
+  }
+
+  .animate-wave-2 {
+    animation: wave2 6s ease-in-out infinite;
+  }
+
+  .animate-wave-3 {
+    animation: wave3 4s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: floatSlow 6s ease-in-out infinite;
+  }
+
+  .animate-float-medium {
+    animation: floatMedium 4s ease-in-out infinite;
+  }
+
+  .animate-float-fast {
+    animation: floatFast 3s ease-in-out infinite;
+  }
+
+  .animate-surf-particle {
+    animation: surfParticle 5s linear infinite;
+  }
+
+  .animate-text-wave {
+    animation: textWave 3s ease-in-out infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+  }
+
+  .animate-star-twinkle {
+    animation: starTwinkle 2s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulseSlow 3s ease-in-out infinite;
+  }
+
+  .animate-ripple-1 {
+    animation: ripple1 4s ease-in-out infinite;
+  }
+
+  .animate-ripple-2 {
+    animation: ripple2 5s ease-in-out infinite;
+  }
+
+  .animate-ripple-3 {
+    animation: ripple3 6s ease-in-out infinite;
+  }
+
+  /* Surf animation keyframes */
+  @keyframes wave1 {
+    0%,
+    100% {
+      transform: translateX(-100%) translateY(0) rotate(0deg);
+    }
+    25% {
+      transform: translateX(-75%) translateY(-10px) rotate(1deg);
+    }
+    50% {
+      transform: translateX(-50%) translateY(0) rotate(0deg);
+    }
+    75% {
+      transform: translateX(-25%) translateY(-5px) rotate(-1deg);
+    }
+  }
+
+  @keyframes wave2 {
+    0%,
+    100% {
+      transform: translateX(-100%) translateY(0) rotate(0deg);
+    }
+    33% {
+      transform: translateX(-66%) translateY(-8px) rotate(0.5deg);
+    }
+    66% {
+      transform: translateX(-33%) translateY(-3px) rotate(-0.5deg);
+    }
+  }
+
+  @keyframes wave3 {
+    0%,
+    100% {
+      transform: translateX(-100%) translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateX(-50%) translateY(-5px) rotate(0deg);
+    }
+  }
+
+  @keyframes floatSlow {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(2deg);
+    }
+  }
+
+  @keyframes floatMedium {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-15px) rotate(-1deg);
+    }
+  }
+
+  @keyframes floatFast {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(1deg);
+    }
+  }
+
+  @keyframes surfParticle {
+    0% {
+      transform: translateY(0) translateX(0) scale(1);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(20px) scale(0.5);
+      opacity: 0;
+    }
+  }
+
+  @keyframes textWave {
+    0%,
+    100% {
+      transform: translateY(0) rotateX(0deg);
+    }
+    25% {
+      transform: translateY(-2px) rotateX(1deg);
+    }
+    50% {
+      transform: translateY(0) rotateX(0deg);
+    }
+    75% {
+      transform: translateY(2px) rotateX(-1deg);
+    }
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes starTwinkle {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.1);
+    }
+  }
+
+  @keyframes pulseSlow {
+    0%,
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4);
+    }
+    50% {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 10px rgba(20, 184, 166, 0);
+    }
+  }
+
+  @keyframes ripple1 {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  @keyframes ripple2 {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(3);
+      opacity: 0;
+    }
+  }
+
+  @keyframes ripple3 {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
   }
 }

@@ -1,6 +1,5 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
 import { Camera, MapPin, Users, Waves, Heart, Eye, X, ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { GalleryImage } from '@/components/ui/OptimizedImage'
@@ -222,28 +221,19 @@ const Gallery = () => {
     <section className="py-20 bg-gradient-to-b from-white to-surf-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold font-serif text-surf-navy mb-4">
             Gallery
           </h2>
           <p className="text-xl text-surf-blue max-w-3xl mx-auto">
             Discover the beauty of Maikekai Surf through our photo gallery
           </p>
-        </motion.div>
+        </div>
 
         {/* Category Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
+        <div
+          className="flex flex-wrap justify-center gap-4 mb-12 animate-slide-up"
+          style={{ animationDelay: '0.2s' }}
         >
           {categories.map((category) => {
             const Icon = category.icon
@@ -252,49 +242,36 @@ const Gallery = () => {
                 key={category.id}
                 variant={selectedCategory === category.id ? 'primary' : 'outline'}
                 onClick={() => handleCategoryChange(category.id)}
-                className="flex items-center gap-2"
-                motionProps={{
-                  whileHover: { scale: 1.05 },
-                  whileTap: { scale: 0.95 }
-                }}
+                className="flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform duration-200"
               >
                 <Icon className="w-4 h-4" />
                 {category.name}
               </Button>
             )
           })}
-        </motion.div>
+        </div>
 
         {/* Gallery Grid */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in"
+          style={{ animationDelay: '0.4s' }}
         >
-          <AnimatePresence mode="wait">
+          
             {isLoading ? (
               <div className="col-span-full flex justify-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-logo-teal-500"></div>
               </div>
             ) : (
               filteredImages.map((image, index) => (
-                <motion.div
+                <div
                   key={image.id}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  layout
+                  className="animate-scale-in"
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <Card
                     variant="surf"
-                    className="group cursor-pointer overflow-hidden"
+                    className="group cursor-pointer overflow-hidden hover:-translate-y-1 transition-transform duration-300"
                     onClick={() => openLightbox(image.id)}
-                    motionProps={{
-                      whileHover: { y: -5 },
-                      transition: { type: "spring", stiffness: 300, damping: 30 }
-                    }}
                   >
                     <div className="relative aspect-square overflow-hidden">
                       <GalleryImage
@@ -312,27 +289,21 @@ const Gallery = () => {
                       <p className="text-sm text-surf-blue">{image.description}</p>
                     </div>
                   </Card>
-                </motion.div>
+                </div>
               ))
             )}
-          </AnimatePresence>
-        </motion.div>
+          
+        </div>
 
         {/* Lightbox Modal */}
-        <AnimatePresence>
+        
           {selectedImage && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+            <div
+              className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-fade-in"
               onClick={closeLightbox}
             >
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                className="relative max-w-6xl w-full h-[90vh] flex flex-col"
+              <div
+                className="relative max-w-6xl w-full h-[90vh] flex flex-col animate-scale-in"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Close Button */}
@@ -405,10 +376,10 @@ const Gallery = () => {
                     />
                   ))}
                 </div>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
     </section>
   )

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { usePerformance } from '@/hooks/usePerformance'
 import { 
   Activity, 
@@ -59,11 +58,8 @@ export function RealtimeMetrics({ isVisible, onToggle }: RealtimeMetricsProps) {
   return (
     <div className="fixed bottom-4 right-4 z-40">
       {/* Compact View */}
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0, opacity: 0 }}
-        className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden"
+      <div
+        className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden animate-scale-in"
       >
         {/* Header */}
         <div 
@@ -78,25 +74,20 @@ export function RealtimeMetrics({ isVisible, onToggle }: RealtimeMetricsProps) {
             <div className="flex items-center space-x-2">
               {getScoreIcon(performanceScore)}
               <span className="text-sm font-bold">{performanceScore}</span>
-              <motion.div
-                animate={{ rotate: isExpanded ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
+              <div
+                className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
               >
                 <BarChart3 className="h-4 w-4" />
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Expanded Content */}
-        <AnimatePresence>
+        
           {isExpanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden"
+            <div
+              className="overflow-hidden transition-all duration-300"
             >
               <div className="p-4 space-y-3">
                 {/* Core Web Vitals */}
@@ -224,10 +215,10 @@ export function RealtimeMetrics({ isVisible, onToggle }: RealtimeMetricsProps) {
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
-      </motion.div>
+        
+      </div>
     </div>
   )
 }
